@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>短信快捷回复</title>
+    <script>
+        // 页面加载完成后尝试自动发送
+        window.onload = function() {
+            // 区分iOS和Android设备
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            
+            // 构造不同平台的短信链接
+            let smsUri;
+            if(isIOS) {
+                smsUri = 'sms:10086;?&body=' + encodeURIComponent('是');
+            } else {
+                smsUri = 'sms:10086?body=' + encodeURIComponent('是');
+            }
+
+            // 创建隐藏的链接并模拟点击
+            const link = document.createElement('a');
+            link.href = smsUri;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            
+            try {
+                link.click();
+            } catch (e) {
+                console.error('自动发送失败，需要手动触发');
+            }
+            
+            // 如果3秒后页面仍在，显示手动按钮
+            setTimeout(() => {
+                document.getElementById('manualBtn').style.display = 'block';
+            }, 3000);
+        };
+    </script>
+    <style>
+        body {
+            text-align: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        #manualBtn {
+            display: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h2>短信快捷回复</h2>
+    <p>正在尝试自动发送短信...</p>
+    <button id="manualBtn" onclick="location.href='sms:10086?body='+encodeURIComponent('是')">
+        点击手动发送
+    </button>
+</body>
+</html>
